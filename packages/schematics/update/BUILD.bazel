@@ -5,8 +5,10 @@
 
 licenses(["notice"])  # MIT
 
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@npm_bazel_jasmine//:index.bzl", "jasmine_node_test")
-load("@npm_bazel_typescript//:index.bzl", "ts_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
+load("//tools:defaults.bzl", "ts_library")
 load("//tools:ts_json_schema.bzl", "ts_json_schema")
 
 package(default_visibility = ["//visibility:public"])
@@ -17,7 +19,6 @@ ts_library(
         include = ["**/*.ts"],
         exclude = [
             "**/*_spec.ts",
-            "**/*_spec_large.ts",
             "**/*_benchmark.ts",
         ],
     ) + [
@@ -50,26 +51,18 @@ ts_json_schema(
 ts_library(
     name = "update_test_lib",
     testonly = True,
-    srcs = glob(
-        include = [
-            "**/*_spec.ts",
-            "**/*_spec_large.ts",
-        ],
-    ),
+    srcs = glob(["**/*_spec.ts"]),
     data = glob(
         include = [
             "**/*.json",
         ],
     ),
     # @external_begin
-    tsconfig = "//:tsconfig-test.json",
     deps = [
         ":update",
         "//packages/angular_devkit/core",
         "//packages/angular_devkit/schematics",
         "//packages/angular_devkit/schematics/testing",
-        "@npm//@types/jasmine",
-        "@npm//@types/node",
         "@npm//@types/semver",
         "@npm//@yarnpkg/lockfile",
         "@npm//ini",
@@ -89,4 +82,19 @@ jasmine_node_test(
         "@npm//npm-registry-client",
         "@npm//source-map",
     ],
+)
+
+pkg_npm(
+    name = "npm_package",
+    deps = [
+        ":update",
+    ],
+)
+
+pkg_tar(
+    name = "npm_package_archive",
+    srcs = [":npm_package"],
+    extension = "tar.gz",
+    strip_prefix = "./npm_package",
+    tags = ["manual"],
 )

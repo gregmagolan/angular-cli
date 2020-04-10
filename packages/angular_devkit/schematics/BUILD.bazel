@@ -6,7 +6,7 @@ package(default_visibility = ["//visibility:public"])
 
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@npm_bazel_jasmine//:index.bzl", "jasmine_node_test")
-load("@npm_bazel_typescript//:index.bzl", "ts_library")
+load("//tools:defaults.bzl", "ts_library")
 
 # @external_begin
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
@@ -22,7 +22,6 @@ ts_library(
         include = ["src/**/*.ts"],
         exclude = [
             "src/**/*_spec.ts",
-            "src/**/*_spec_large.ts",
             "src/**/*_benchmark.ts",
         ],
     ),
@@ -42,22 +41,12 @@ ts_library(
 ts_library(
     name = "schematics_test_lib",
     testonly = True,
-    srcs = glob(
-        include = [
-            "src/**/*_spec.ts",
-            "src/**/*_spec_large.ts",
-        ],
-    ),
-    # @external_begin
-    tsconfig = "//:tsconfig-test.json",
-    # @external_end
+    srcs = glob(["src/**/*_spec.ts"]),
     deps = [
         ":schematics",
         "//packages/angular_devkit/core",
         "//packages/angular_devkit/core/node",
         "//packages/angular_devkit/schematics/testing",
-        "@npm//@types/jasmine",
-        "@npm//@types/node",
         "@npm//rxjs",
     ],
 )

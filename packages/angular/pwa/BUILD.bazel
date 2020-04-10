@@ -5,8 +5,8 @@
 
 licenses(["notice"])  # MIT
 
-load("@npm_bazel_typescript//:index.bzl", "ts_library")
 load("@npm_bazel_jasmine//:index.bzl", "jasmine_node_test")
+load("//tools:defaults.bzl", "ts_library")
 load("//tools:ts_json_schema.bzl", "ts_json_schema")
 
 package(default_visibility = ["//visibility:public"])
@@ -23,7 +23,6 @@ ts_library(
         exclude = [
             "pwa/files/**/*",
             "**/*_spec.ts",
-            "**/*_spec_large.ts",
         ],
     ) + [
         "//packages/angular/pwa:pwa/schema.ts",
@@ -54,19 +53,11 @@ ts_json_schema(
 ts_library(
     name = "pwa_test_lib",
     testonly = True,
-    srcs = glob(
-        include = [
-            "pwa/**/*_spec.ts",
-            "pwa/**/*_spec_large.ts",
-        ],
-    ),
+    srcs = glob(["pwa/**/*_spec.ts"]),
     # strict_checks = False,
-    tsconfig = "//:tsconfig-test.json",
     deps = [
         ":pwa",
         "//packages/angular_devkit/schematics/testing",
-        "@npm//@types/jasmine",
-        "@npm//@types/node",
     ],
 )
 

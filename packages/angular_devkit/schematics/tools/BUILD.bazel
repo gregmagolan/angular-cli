@@ -5,9 +5,11 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@npm_bazel_jasmine//:index.bzl", "jasmine_node_test")
-load("@npm_bazel_typescript//:index.bzl", "ts_library")
+load("//tools:defaults.bzl", "ts_library")
 
 licenses(["notice"])
+
+package(default_visibility = ["//visibility:public"])
 
 ts_library(
     name = "tools",
@@ -40,13 +42,9 @@ ts_library(
     srcs = glob(
         include = [
             "**/*_spec.ts",
-            "**/*_spec_large.ts",
             "test/**/*.ts",
         ],
     ),
-    # @external_begin
-    tsconfig = "//:tsconfig-test.json",
-    # @external_end
     deps = [
         ":tools",
         "//packages/angular_devkit/core",
@@ -55,8 +53,6 @@ ts_library(
         "//packages/angular_devkit/schematics/tasks",
         "//packages/angular_devkit/schematics/testing",
         "//tests/angular_devkit/schematics/tools/file-system-engine-host:file_system_engine_host_test_lib",
-        "@npm//@types/jasmine",
-        "@npm//@types/node",
         "@npm//rxjs",
     ],
 )

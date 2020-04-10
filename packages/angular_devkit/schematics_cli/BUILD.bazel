@@ -4,10 +4,12 @@
 # found in the LICENSE file at https://angular.io/license
 package(default_visibility = ["//visibility:public"])
 
-load("@npm_bazel_typescript//:index.bzl", "ts_library")
 load("@npm_bazel_jasmine//:index.bzl", "jasmine_node_test")
+load("//tools:defaults.bzl", "ts_library")
 
 licenses(["notice"])
+
+package(default_visibility = ["//visibility:public"])
 
 # @angular-devkit/schematics-cli
 
@@ -17,7 +19,6 @@ ts_library(
         include = ["bin/**/*.ts"],
         exclude = [
             "bin/**/*_spec.ts",
-            "bin/**/*_spec_large.ts",
             "bin/**/*_benchmark.ts",
         ],
     ),
@@ -52,11 +53,8 @@ ts_library(
         ],
     ),
     # strict_checks = False,
-    tsconfig = "//:tsconfig-test.json",
     deps = [
         ":schematics_cli",
-        "@npm//@types/jasmine",
-        "@npm//@types/node",
     ],
 )
 

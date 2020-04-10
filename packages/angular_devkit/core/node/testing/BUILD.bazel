@@ -4,9 +4,11 @@
 # found in the LICENSE file at https://angular.io/license
 package(default_visibility = ["//visibility:public"])
 
-load("@npm_bazel_typescript//:index.bzl", "ts_library")
+load("//tools:defaults.bzl", "ts_library")
 
 licenses(["notice"])  # MIT License
+
+package(default_visibility = ["//visibility:public"])
 
 ts_library(
     name = "testing",
@@ -14,7 +16,6 @@ ts_library(
         include = ["**/*.ts"],
         exclude = [
             "**/*_spec.ts",
-            "**/*_spec_large.ts",
             "**/*_benchmark.ts",
         ],
     ),
